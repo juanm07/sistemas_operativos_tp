@@ -1,8 +1,16 @@
 #ifndef LISTA_ATOMICA_HPP
 #define LISTA_ATOMICA_HPP
-
+#include <mutex>
 #include <atomic>
 #include <cstddef>
+
+using namespace std;
+
+//VARIABLES
+
+
+
+// -----------------------
 
 template<typename T>
 class ListaAtomica {
@@ -15,6 +23,8 @@ class ListaAtomica {
     };
 
     std::atomic<Nodo *> _cabeza;
+    mutex mutexInsertar;
+
 
  public:
     ListaAtomica() : _cabeza(nullptr) {}
@@ -30,7 +40,16 @@ class ListaAtomica {
     }
 
     void insertar(const T &valor) {
-        // Completar (Ejercicio 1)
+        mutexInsertar.lock();
+        Nodo* n = _cabeza.load();
+        Nodo* nodo = new Nodo(valor);     
+        if (n != NULL){
+            nodo->_siguiente = n;
+            _cabeza.store(nodo, std::memory_order_seq_cst );
+        } else {
+            _cabeza.store(nodo, std::memory_order_seq_cst );
+        }
+        mutexInsertar.unlock();
     }
 
     T& operator[](size_t i) const {
