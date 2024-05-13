@@ -4,9 +4,12 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-
+#include <thread>
+#include <vector>
 #include "CargarArchivos.hpp"
 
+
+atomic<int> archivo = 0;    
 int cargarArchivo(
     HashMapConcurrente &hashMap,
     std::string filePath
@@ -23,6 +26,7 @@ int cargarArchivo(
     }
     while (file >> palabraActual) {
         // Completar (Ejercicio 4)
+        incrementar(palabraActual);
         cant++;
     }
     // Cierro el archivo.
@@ -35,6 +39,21 @@ int cargarArchivo(
     return cant;
 }
 
+//esta funcion aux no estaba en el archivo original
+void cargarMultiplesArchivosAux(
+    HashMapConcurrente &hashMap,
+   
+    std::vector<std::string> filePaths
+) {
+    // Completar (Ejercicio 4)
+    int indice;
+    int n = sizeof(filePaths);
+    while((indice = archivo++) <= n){  
+        string filePath = filePaths[indice--];          //no se si deberia poner un mutex aca
+        cargarArchivo(hashMap, filePath);  
+    }
+    
+}
 
 void cargarMultiplesArchivos(
     HashMapConcurrente &hashMap,
@@ -42,6 +61,15 @@ void cargarMultiplesArchivos(
     std::vector<std::string> filePaths
 ) {
     // Completar (Ejercicio 4)
+    vector<thread> threads;
+    for(int i = 0; i < cant_threads; i++){
+        //buscar max
+        threads.emplace_back(cargarMultiplesArchivosAux,ref(hashMap), ref(filePaths));
+    }
+    
+    for(auto &t: threads){
+        t.join();
+    }
 }
 
 #endif
