@@ -12,6 +12,11 @@ int cargarArchivo(
     std::string filePath
 );
 
+void cargarMultiplesArchivosAux(
+    HashMapConcurrente &hashMap,
+    std::vector<std::string> filePaths
+);
+
 void cargarMultiplesArchivos(
     HashMapConcurrente &hashMap,
     unsigned int cantThreads,
