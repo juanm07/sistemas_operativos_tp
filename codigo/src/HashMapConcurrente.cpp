@@ -27,7 +27,7 @@ unsigned int HashMapConcurrente::hashIndex(std::string clave) {
 
 void HashMapConcurrente::incrementar(std::string clave) {
     unsigned int indice = hashIndex(clave);
-    mutexIncrementar[indice].lock();
+    mutex[indice].lock();
     sem_wait(&semIncYMax);
     bool existe = false;
     for(auto& palabra: *tabla[indice]){
@@ -43,15 +43,19 @@ void HashMapConcurrente::incrementar(std::string clave) {
     }
 
     sem_post(&semIncYMax);
-    mutexIncrementar[indice].unlock();    
+    mutex[indice].unlock();    
 }
 
 std::vector<std::string> HashMapConcurrente::claves() {
     vector<string> res;
+    for (int j = 0; j < cantLetras; j++){
+        mutex[j].lock();
+    }
     for (int i = 0; i < cantLetras; i++){
         for(auto& clave_actual: *tabla[i]){
             res.push_back(clave_actual.first);
         }
+        mutex[i]].unlock();
     }
     return res;
 }
