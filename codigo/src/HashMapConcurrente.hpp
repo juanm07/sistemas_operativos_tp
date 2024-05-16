@@ -28,8 +28,7 @@ class HashMapConcurrente {
  private:
     ListaAtomica<hashMapPair> *tabla[HashMapConcurrente::cantLetras];
     static unsigned int hashIndex(std::string clave);
-    mutex mutexIncrementar[cantLetras];
-    mutex mutex;
+    mutex mutex[cantLetras];
     mutex mutexMax;
     sem_t semIncYMax;
     

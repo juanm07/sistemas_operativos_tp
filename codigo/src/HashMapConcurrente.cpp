@@ -55,7 +55,7 @@ std::vector<std::string> HashMapConcurrente::claves() {
         for(auto& clave_actual: *tabla[i]){
             res.push_back(clave_actual.first);
         }
-        mutex[i]].unlock();
+        mutex[i].unlock();
     }
     return res;
 }
@@ -104,13 +104,18 @@ void HashMapConcurrente::maximoParaleloAux() {
             }
             mutexMax.unlock();
         }
+
+        mutex[indice--].unlock();
         
     }
 }
 
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
-    
     vector<thread> threads;
+    for (int j = 0; j < cantLetras; j++){
+        mutex[j].lock();
+    }
+    
     for(int i = 0; i < cant_threads; i++){
         //buscar max
         threads.emplace_back(maximoParaleloAux);

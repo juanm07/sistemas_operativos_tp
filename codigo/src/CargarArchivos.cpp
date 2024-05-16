@@ -49,7 +49,7 @@ void cargarMultiplesArchivosAux(
     int indice;
     int n = sizeof(filePaths);
     while((indice = archivo++) <= n){  
-        string filePath = filePaths[indice--];          //no se si deberia poner un mutex aca
+        string filePath = filePaths[indice--];          
         cargarArchivo(hashMap, filePath);  
     }
     
