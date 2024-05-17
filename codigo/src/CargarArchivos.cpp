@@ -48,8 +48,8 @@ void cargarMultiplesArchivosAux(
     // Completar (Ejercicio 4)
     int indice;
     int n = sizeof(filePaths);
-    while((indice = archivo++) <= n){  
-        string filePath = filePaths[indice--];          
+    while((indice = archivo++) < n){  
+        string filePath = filePaths[indice];          
         cargarArchivo(hashMap, filePath);  
     }
     
