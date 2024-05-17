@@ -94,9 +94,9 @@ hashMapPair HashMapConcurrente::maximo() {
 
 void HashMapConcurrente::maximoParaleloAux() {
     int indice;
-    while((indice = index++) <= 26){                //cuando i == 26 quiere decir que estoy en tabla[25]. Lo tengo q hacer asi para q no pueda pasar que mas de un thread use el mismo tabla[indice]
+    while((indice = index++) < 26){                //index++ devuelve el valor anterior de index
 
-         for (auto &palabra : *tabla[indice--]) {
+         for (auto &palabra : *tabla[indice]) {
             mutexMax.lock();
             if(palabra.second > maximo.second){
                 maximo.second = palabra.second;
