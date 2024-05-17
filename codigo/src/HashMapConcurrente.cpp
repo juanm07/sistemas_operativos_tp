@@ -10,7 +10,7 @@
 
 using namespace std;
 
-atomic<int> i = 0;                                  //no se donde crear estas variables 
+atomic<int> index = 0;                                  //no se donde crear estas variables 
 hashMapPair *maximo = new hashMapPair();           //no se donde crear estas variables 
 maximo->second = -1;
 maximo->first = "";    
@@ -94,7 +94,7 @@ hashMapPair HashMapConcurrente::maximo() {
 
 void HashMapConcurrente::maximoParaleloAux() {
     int indice;
-    while((indice = i++) <= 26){                //cuando i == 26 quiere decir que estoy en tabla[25]. Lo tengo q hacer asi para q no pueda pasar que mas de un thread use el mismo tabla[indice]
+    while((indice = index++) <= 26){                //cuando i == 26 quiere decir que estoy en tabla[25]. Lo tengo q hacer asi para q no pueda pasar que mas de un thread use el mismo tabla[indice]
 
          for (auto &palabra : *tabla[indice--]) {
             mutexMax.lock();
@@ -115,7 +115,7 @@ hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
     for (int j = 0; j < cantLetras; j++){
         mutex[j].lock();
     }
-     vector<thread> threads;
+    vector<thread> threads;
     for(int i = 0; i < cant_threads; i++){
         //buscar max
         threads.emplace_back(maximoParaleloAux);
