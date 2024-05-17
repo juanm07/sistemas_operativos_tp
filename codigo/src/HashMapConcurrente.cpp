@@ -10,12 +10,11 @@
 
 using namespace std;
 
-atomic<int> index = 0;                                  //no se donde crear estas variables 
-hashMapPair *maximo = new hashMapPair();           //no se donde crear estas variables 
-maximo->second = -1;
-maximo->first = "";    
+atomic<int> index(0);                                  //no se donde crear estas variables 
+hashMapPair maximoHMP = make_pair("", -1);           //no se donde crear estas variables 
+
 HashMapConcurrente::HashMapConcurrente() {                                  
-    sem_init(&semIncYMax, 0 , 1);
+    sem_init(&_semIncYMax, 0 , 1);
     for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++) {
         tabla[i] = new ListaAtomica<hashMapPair>();
     }
@@ -27,8 +26,8 @@ unsigned int HashMapConcurrente::hashIndex(std::string clave) {
 
 void HashMapConcurrente::incrementar(std::string clave) {
     unsigned int indice = hashIndex(clave);
-    mutex[indice].lock();
-    sem_wait(&semIncYMax);
+    _mutex[indice].lock();
+    sem_wait(&_semIncYMax);
     bool existe = false;
     for(auto& palabra: *tabla[indice]){
         if(palabra.first == clave){
@@ -42,20 +41,20 @@ void HashMapConcurrente::incrementar(std::string clave) {
         tabla[indice]->insertar(make_pair(clave, 1));
     }
 
-    sem_post(&semIncYMax);
-    mutex[indice].unlock();    
+    sem_post(&_semIncYMax);
+    _mutex[indice].unlock();    
 }
 
 std::vector<std::string> HashMapConcurrente::claves() {
     vector<string> res;
     for (int j = 0; j < cantLetras; j++){
-        mutex[j].lock();
+        _mutex[j].lock();
     }
     for (int i = 0; i < cantLetras; i++){
         for(auto& clave_actual: *tabla[i]){
             res.push_back(clave_actual.first);
         }
-        mutex[i].unlock();
+        _mutex[i].unlock();
     }
     return res;
 }
@@ -78,7 +77,7 @@ hashMapPair HashMapConcurrente::maximo() {
     hashMapPair *max = new hashMapPair();
     max->second = 0;
 
-    sem_wait(&semIncYMax);
+    sem_wait(&_semIncYMax);
     for (unsigned int index = 0; index < HashMapConcurrente::cantLetras; index++) {
         for (auto &p : *tabla[index]) {
             if (p.second > max->second) {
@@ -88,7 +87,7 @@ hashMapPair HashMapConcurrente::maximo() {
         }
     }
 
-    sem_post(&semIncYMax);
+    sem_post(&_semIncYMax);
     return *max;
 }
 
@@ -97,15 +96,15 @@ void HashMapConcurrente::maximoParaleloAux() {
     while((indice = index++) < 26){                //index++ devuelve el valor anterior de index
 
          for (auto &palabra : *tabla[indice]) {
-            mutexMax.lock();
-            if(palabra.second > maximo.second){
-                maximo.second = palabra.second;
-                maximo.first = palabra.first;
+            _mutexMax.lock();
+            if(palabra.second > maximoHMP.second){
+                maximoHMP.second = palabra.second;
+                maximoHMP.first = palabra.first;
             }
-            mutexMax.unlock();
+            _mutexMax.unlock();
         }
 
-        mutex[indice--].unlock();
+        _mutex[indice--].unlock();
         
     }
 }
@@ -113,18 +112,18 @@ void HashMapConcurrente::maximoParaleloAux() {
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
    
     for (int j = 0; j < cantLetras; j++){
-        mutex[j].lock();
+        _mutex[j].lock();
     }
     vector<thread> threads;
-    for(int i = 0; i < cant_threads; i++){
+    for(unsigned int i = 0; i < cant_threads; i++){
         //buscar max
-        threads.emplace_back(maximoParaleloAux);
+        threads.emplace_back(&HashMapConcurrente::maximoParaleloAux, this);
     }
     
     for(auto &t: threads){
         t.join();
     }
-    return maximo;
+    return maximoHMP;
 }
 
 

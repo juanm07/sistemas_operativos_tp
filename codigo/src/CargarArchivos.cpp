@@ -9,7 +9,8 @@
 #include "CargarArchivos.hpp"
 
 
-atomic<int> archivo = 0;    
+atomic<int> archivo(0); 
+
 int cargarArchivo(
     HashMapConcurrente &hashMap,
     std::string filePath
@@ -26,7 +27,7 @@ int cargarArchivo(
     }
     while (file >> palabraActual) {
         // Completar (Ejercicio 4)
-        incrementar(palabraActual);
+        hashMap.incrementar(palabraActual);
         cant++;
     }
     // Cierro el archivo.
@@ -62,7 +63,7 @@ void cargarMultiplesArchivos(
 ) {
     // Completar (Ejercicio 4)
     vector<thread> threads;
-    for(int i = 0; i < cant_threads; i++){
+    for(unsigned int i = 0; i < cantThreads; i++){
         //buscar max
         threads.emplace_back(cargarMultiplesArchivosAux,ref(hashMap), ref(filePaths));
     }
