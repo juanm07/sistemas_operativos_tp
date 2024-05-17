@@ -111,11 +111,11 @@ void HashMapConcurrente::maximoParaleloAux() {
 }
 
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
-    vector<thread> threads;
+   
     for (int j = 0; j < cantLetras; j++){
         mutex[j].lock();
     }
-    
+     vector<thread> threads;
     for(int i = 0; i < cant_threads; i++){
         //buscar max
         threads.emplace_back(maximoParaleloAux);
