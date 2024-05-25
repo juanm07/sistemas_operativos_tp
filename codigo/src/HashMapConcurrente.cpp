@@ -10,14 +10,15 @@
 
 using namespace std;
 
-atomic<int> index(0);                                  //no se donde crear estas variables 
-hashMapPair maximoHMP = make_pair("", -1);           //no se donde crear estas variables 
+//atomic<int> index(0);                                  //no se donde crear estas variables
+//hashMapPair maximoHMP = make_pair("", -1);           //no se donde crear estas variables
 
 HashMapConcurrente::HashMapConcurrente() {                                  
     sem_init(&_semIncYMax, 0 , 1);
     for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++) {
         tabla[i] = new ListaAtomica<hashMapPair>();
     }
+    _index = 0;
 }
 
 unsigned int HashMapConcurrente::hashIndex(std::string clave) {
@@ -61,7 +62,7 @@ std::vector<std::string> HashMapConcurrente::claves() {
 
 unsigned int HashMapConcurrente::valor(std::string clave) {
     unsigned int indice = hashIndex(clave);
-    int valor = 0;
+    unsigned int valor = 0;
     for(auto& palabra: *tabla[indice]){
         if(palabra.first == clave){
             valor = palabra.second;
@@ -74,32 +75,32 @@ unsigned int HashMapConcurrente::valor(std::string clave) {
 }
 
 hashMapPair HashMapConcurrente::maximo() {
-    hashMapPair *max = new hashMapPair();
-    max->second = 0;
+    hashMapPair res = make_pair("", 0);
+    res.second = 0;
 
     sem_wait(&_semIncYMax);
-    for (unsigned int index = 0; index < HashMapConcurrente::cantLetras; index++) {
-        for (auto &p : *tabla[index]) {
-            if (p.second > max->second) {
-                max->first = p.first;
-                max->second = p.second;
+    for (unsigned int i = 0; i < HashMapConcurrente::cantLetras; i++) {
+        for (auto &p : *tabla[i]) {
+            if (p.second > res.second) {
+                res.first = p.first;
+                res.second = p.second;
             }
         }
     }
 
     sem_post(&_semIncYMax);
-    return *max;
+    return res;
 }
 
 void HashMapConcurrente::maximoParaleloAux() {
     int indice;
-    while((indice = index++) < 26){                //index++ devuelve el valor anterior de index
+    while((indice = _index++) < 26){                //index++ devuelve el valor anterior de index
 
          for (auto &palabra : *tabla[indice]) {
             _mutexMax.lock();
-            if(palabra.second > maximoHMP.second){
-                maximoHMP.second = palabra.second;
-                maximoHMP.first = palabra.first;
+            if(palabra.second > _maximoHMP.second){
+                _maximoHMP.second = palabra.second;
+                _maximoHMP.first = palabra.first;
             }
             _mutexMax.unlock();
         }
@@ -123,7 +124,7 @@ hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
     for(auto &t: threads){
         t.join();
     }
-    return maximoHMP;
+    return _maximoHMP;
 }
 
 

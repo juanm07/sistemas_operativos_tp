@@ -31,7 +31,8 @@ class HashMapConcurrente {
     mutex _mutex[cantLetras];
     mutex _mutexMax;
     sem_t _semIncYMax;
-    
+    atomic<int> _index;
+    hashMapPair _maximoHMP = make_pair("", 0);
 };
 
 #endif  /* HMC_HPP */
