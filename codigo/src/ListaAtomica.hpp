@@ -6,12 +6,6 @@
 
 using namespace std;
 
-//VARIABLES
-
-
-
-// -----------------------
-
 template<typename T>
 class ListaAtomica {
  private:

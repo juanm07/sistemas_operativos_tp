@@ -31,6 +31,13 @@ int main(int argc, char **argv) {
     auto maximo = hashMap.maximoParalelo(cantThreadsMaximo);
 
     std::cout << maximo.first << " " << maximo.second << std::endl;
+    
+    // std::vector<std::string>claves = hashMap.claves();
+    // for(int i = 0;i<claves.size();i++){
+    //     std::string clave = claves[i];
+    //     unsigned int v = hashMap.valor(clave); 
+    //     std::cout << "Valor: " << v << ", Asociado a clave: " << clave << std::endl;
+    // }
 
     return 0;
 }

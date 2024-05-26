@@ -67,7 +67,6 @@ void cargarMultiplesArchivos(
         //buscar max
         threads.emplace_back(cargarMultiplesArchivosAux,ref(hashMap), ref(filePaths));
     }
-    
     for(auto &t: threads){
         t.join();
     }
