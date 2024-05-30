@@ -28,6 +28,7 @@ int cargarArchivo(
     while (file >> palabraActual) {
         // Completar (Ejercicio 4)
         hashMap.incrementar(palabraActual);
+        //cout<<palabraActual<<endl;
         cant++;
     }
     // Cierro el archivo.
@@ -49,7 +50,8 @@ void cargarMultiplesArchivosAux(
     // Completar (Ejercicio 4)
     int indice;
     int n = filePaths.size();
-    while((indice = archivo++) < n){  
+    while((indice = archivo++) < n){
+        //cout<<indice;  
         string filePath = filePaths[indice];          
         cargarArchivo(hashMap, filePath);  
     }
@@ -70,6 +72,7 @@ void cargarMultiplesArchivos(
     for(auto &t: threads){
         t.join();
     }
+    archivo.store(0); 
 }
 
 #endif

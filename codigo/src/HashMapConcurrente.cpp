@@ -105,7 +105,7 @@ void HashMapConcurrente::maximoParaleloAux() {
             _mutexMax.unlock();
         }
 
-        _mutex[indice--].unlock();
+        _mutex[indice].unlock();
         
     }
 }
