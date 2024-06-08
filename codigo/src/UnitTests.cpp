@@ -247,7 +247,7 @@ LT_BEGIN_TEST(TestsNuestros, MaximoNoDevuelvaValorIncorrecto)
     LT_CHECK_EQ(hM.valor("bufalo"), 2);
     LT_CHECK_EQ(hM.valor("yacare"), 21);
     LT_CHECK_EQ(hM.valor("vivora"), 1);
-    LT_CHECK_EQ(hM.valor("tigre"), 5);
+    LT_CHECK_EQ(hM.valor("tigre"), 4);
     LT_CHECK_EQ(hM.valor("flamenco"), 31);
     LT_CHECK_EQ(hM.valor("hipopotamo"), 10);
     LT_CHECK_EQ(hM.valor("jirafa"), 4);
@@ -299,7 +299,7 @@ LT_BEGIN_TEST(TestsNuestros, MaximoParaleloNoDevuelvaValorIncorrecto)
     LT_CHECK_EQ(hM.valor("bufalo"), 2);
     LT_CHECK_EQ(hM.valor("yacare"), 21);
     LT_CHECK_EQ(hM.valor("vivora"), 1);
-    LT_CHECK_EQ(hM.valor("tigre"), 5);
+    LT_CHECK_EQ(hM.valor("tigre"), 4);
     LT_CHECK_EQ(hM.valor("flamenco"), 31);
     LT_CHECK_EQ(hM.valor("hipopotamo"), 10);
     LT_CHECK_EQ(hM.valor("jirafa"), 4);
@@ -333,13 +333,19 @@ LT_BEGIN_TEST(TestsNuestros, MaximoParaleloNoDevuelvaValorIncorrecto)
     hM.incrementar("zoo");
     hM.incrementar("zoo");
     hM.incrementar("zoo");
+    hM.incrementar("zoo");
+    hM.incrementar("zoo");
+    hM.incrementar("zoo");
+    hM.incrementar("zoo");
+    hM.incrementar("zoo");
+    hM.incrementar("zoo");
 
 
     LT_CHECK_EQ(actual.first, "arbol");
     LT_CHECK_EQ(actual.second, 65);
 
     LT_CHECK_EQ(hM.valor("arbol"), 65);
-    LT_CHECK_EQ(hM.valor("zoo"), 58);
+    LT_CHECK_EQ(hM.valor("zoo"), 64);
     LT_CHECK_EQ(hM.claves().size(), 15);
 LT_END_TEST(MaximoParaleloNoDevuelvaValorIncorrecto)
 
@@ -371,7 +377,7 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     LT_CHECK_EQ(hM.valor("bufalo"), 2);
     LT_CHECK_EQ(hM.valor("yacare"), 21);
     LT_CHECK_EQ(hM.valor("vivora"), 1);
-    LT_CHECK_EQ(hM.valor("tigre"), 5);
+    LT_CHECK_EQ(hM.valor("tigre"), 4);
     LT_CHECK_EQ(hM.valor("flamenco"), 31);
     LT_CHECK_EQ(hM.valor("hipopotamo"), 10);
     LT_CHECK_EQ(hM.valor("jirafa"), 4);
@@ -430,7 +436,7 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     LT_CHECK_EQ(hM.valor("bufalo"), 2);
     LT_CHECK_EQ(hM.valor("yacare"), 21);
     LT_CHECK_EQ(hM.valor("vivora"), 1);
-    LT_CHECK_EQ(hM.valor("tigre"), 5);
+    LT_CHECK_EQ(hM.valor("tigre"), 4);
     LT_CHECK_EQ(hM.valor("flamenco"), 31);
     LT_CHECK_EQ(hM.valor("hipopotamo"), 11);
     LT_CHECK_EQ(hM.valor("jirafa"), 4);
