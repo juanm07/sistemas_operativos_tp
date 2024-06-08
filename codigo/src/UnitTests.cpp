@@ -387,8 +387,11 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     LT_CHECK_EQ(hM.valor("caballo"), 3);
     LT_CHECK_EQ(hM.claves().size(), 15);
 
+    hM.incrementar("zoo");
+    hashMapPair primerMax = hM.maximoParalelo(4);
     hM.incrementar("arbol");
     hM.incrementar("arbol");
+    hashMapPair segundoMax = hM.maximoParalelo(3);
     hM.incrementar("arbol");
     hM.incrementar("arbol");
     hM.incrementar("arbol");
@@ -422,11 +425,19 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     hM.incrementar("perro");
     hM.incrementar("perro");
     hM.incrementar("perro");
+    hashMapPair tercerMax = hM.maximoParalelo(2);
 
-    LT_CHECK_EQ(v.size(), 16);
-    LT_CHECK_EQ(hM.claves().size(), 17);
+
+    LT_CHECK_EQ(primerMax.first, "zoo");
+    LT_CHECK_EQ(primerMax.second, 51);
+    LT_CHECK_EQ(segundoMax.first, "arbol");
+    LT_CHECK_EQ(segundoMax.second, 52);
+    LT_CHECK_EQ(tercerMax.first, "arbol");
+    LT_CHECK_EQ(tercerMax.second, 57);
     LT_CHECK_EQ(ar, 57);
     LT_CHECK_EQ(ag, 9);
+    LT_CHECK_EQ(v.size(), 16);
+    LT_CHECK_EQ(hM.claves().size(), 17);
     LT_CHECK_EQ(hM.valor("pez"), 4);
     LT_CHECK_EQ(hM.valor("perro"), 11);
     LT_CHECK_EQ(hM.valor("arbol"), 57);
