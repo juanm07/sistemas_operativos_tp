@@ -224,6 +224,80 @@ LT_BEGIN_TEST(TestsEjercicio4, CargarMultiplesArchivosFuncionaDosThreads)
     LT_CHECK_EQ(hM.claves().size(), 12);
 LT_END_TEST(CargarMultiplesArchivosFuncionaDosThreads)
 
+// Tests nuestros
+
+LT_BEGIN_SUITE(TestsNuestros)
+
+HashMapConcurrente hM;
+
+void set_up()
+{
+}
+
+void tear_down()
+{
+}
+LT_END_SUITE(TestsNuestros)
+
+LT_BEGIN_TEST(TestsNuestros, MaximoNoDevuelvaValorIncorrecto)
+    cargarMultiplesArchivos(hM, 2, {"data/concurrencia-1", "data/concurrencia-2"});
+    LT_CHECK_EQ(hM.valor("arbol"), 50);
+    LT_CHECK_EQ(hM.valor("zoo"), 50);
+    LT_CHECK_EQ(hM.claves().size(), 2);
+
+    hM.incrementar("arbol");
+    hM.incrementar("arbol");
+    hM.incrementar("arbol");
+    hashMapPair actual = hM.maximo();
+    hM.incrementar("zoo");
+
+    LT_CHECK_EQ(actual.first, "arbol");
+    LT_CHECK_EQ(actual.second, 53);
+
+    LT_CHECK_EQ(hM.valor("arbol"), 53);
+    LT_CHECK_EQ(hM.valor("zoo"), 51);
+    LT_CHECK_EQ(hM.claves().size(), 2);
+LT_END_TEST(MaximoNoDevuelvaValorIncorrecto)
+
+LT_BEGIN_TEST(TestsNuestros, MaximoParaleloNoDevuelvaValorIncorrecto)
+    cargarMultiplesArchivos(hM, 2, {"data/concurrencia-1", "data/concurrencia-2"});
+    LT_CHECK_EQ(hM.valor("arbol"), 50);
+    LT_CHECK_EQ(hM.valor("zoo"), 50);
+    LT_CHECK_EQ(hM.claves().size(), 2);
+
+    hM.incrementar("arbol");
+    hM.incrementar("arbol");
+    hM.incrementar("arbol");
+    hashMapPair actual = hM.maximoParalelo(2);
+    hM.incrementar("zoo");
+
+    LT_CHECK_EQ(actual.first, "arbol");
+    LT_CHECK_EQ(actual.second, 53);
+
+    LT_CHECK_EQ(hM.valor("arbol"), 53);
+    LT_CHECK_EQ(hM.valor("zoo"), 51);
+    LT_CHECK_EQ(hM.claves().size(), 2);
+LT_END_TEST(MaximoParaleloNoDevuelvaValorIncorrecto)
+
+LT_BEGIN_TEST(TestsNuestros, IncrementarDespuesNoAfectaClaves)
+    cargarMultiplesArchivos(hM, 2, {"data/test-1", "data/test-2", "data/test-3"});
+    LT_CHECK_EQ(hM.valor("arbol"), 0);
+    LT_CHECK_EQ(hM.valor("zoo"), 0);
+    LT_CHECK_EQ(hM.claves().size(), 12);
+
+    vector<std::string> v = hM.claves();
+    hM.incrementar("arbol");
+    hM.incrementar("zoo");
+
+    LT_CHECK_EQ(v.size(), 12);
+    LT_CHECK_EQ(hM.claves().size(), 14);
+    LT_CHECK_EQ(hM.valor("arbol"), 1);
+    LT_CHECK_EQ(hM.valor("zoo"), 1);
+    LT_CHECK_EQ(hM.valor("tiranosaurio"), 2);
+    LT_CHECK_EQ(hM.valor("linux"), 3);
+    LT_CHECK_EQ(hM.valor("estegosaurio"), 4);
+LT_END_TEST(IncrementarDespuesNoAfectaClaves)
+
 // Ejecutar tests
 LT_BEGIN_AUTO_TEST_ENV()
     AUTORUN_TESTS()
