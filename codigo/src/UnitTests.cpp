@@ -343,6 +343,25 @@ LT_BEGIN_TEST(TestsNuestros, MaximoParaleloNoDevuelvaValorIncorrecto)
     LT_CHECK_EQ(hM.claves().size(), 15);
 LT_END_TEST(MaximoParaleloNoDevuelvaValorIncorrecto)
 
+LT_BEGIN_TEST(TestsNuestros, IncrementarDespuesNoAfectaClaves)
+    cargarMultiplesArchivos(hM, 1, {"data/test-1", "data/test-2", "data/test-3"});
+    LT_CHECK_EQ(hM.valor("arbol"), 0);
+    LT_CHECK_EQ(hM.valor("zoo"), 0);
+    LT_CHECK_EQ(hM.claves().size(), 12);
+
+    vector<std::string> v = hM.claves();
+    hM.incrementar("arbol");
+    hM.incrementar("zoo");
+
+    LT_CHECK_EQ(v.size(), 12);
+    LT_CHECK_EQ(hM.claves().size(), 14);
+    LT_CHECK_EQ(hM.valor("arbol"), 1);
+    LT_CHECK_EQ(hM.valor("zoo"), 1);
+    LT_CHECK_EQ(hM.valor("tiranosaurio"), 2);
+    LT_CHECK_EQ(hM.valor("linux"), 3);
+    LT_CHECK_EQ(hM.valor("estegosaurio"), 4);
+LT_END_TEST(IncrementarDespuesNoAfectaClaves)
+
 LT_BEGIN_TEST(TestsNuestros, testCompleto)
      cargarMultiplesArchivos(hM, 4, {"data/concurrencia-1", "data/concurrencia-2", "data/concurrencia-3", "data/concurrencia-4"});
     LT_CHECK_EQ(hM.valor("arbol"), 50);
@@ -385,6 +404,7 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     hM.incrementar("leon");
     hM.incrementar("liebre");
     hM.incrementar("zoo");
+    vector<std::string> v = hM.claves();
     hM.incrementar("perro");
     hM.incrementar("perro");
     hM.incrementar("perro");
@@ -397,7 +417,7 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     hM.incrementar("perro");
     hM.incrementar("perro");
 
-    
+    LT_CHECK_EQ(v.size(), 16);
     LT_CHECK_EQ(hM.claves().size(), 17);
     LT_CHECK_EQ(ar, 57);
     LT_CHECK_EQ(ag, 9);
@@ -420,24 +440,7 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     LT_CHECK_EQ(hM.valor("caballo"), 6);
 LT_END_TEST(testCompleto)
 
-LT_BEGIN_TEST(TestsNuestros, IncrementarDespuesNoAfectaClaves)
-    cargarMultiplesArchivos(hM, 1, {"data/test-1", "data/test-2", "data/test-3"});
-    LT_CHECK_EQ(hM.valor("arbol"), 0);
-    LT_CHECK_EQ(hM.valor("zoo"), 0);
-    LT_CHECK_EQ(hM.claves().size(), 12);
 
-    vector<std::string> v = hM.claves();
-    hM.incrementar("arbol");
-    hM.incrementar("zoo");
-
-    LT_CHECK_EQ(v.size(), 12);
-    LT_CHECK_EQ(hM.claves().size(), 14);
-    LT_CHECK_EQ(hM.valor("arbol"), 1);
-    LT_CHECK_EQ(hM.valor("zoo"), 1);
-    LT_CHECK_EQ(hM.valor("tiranosaurio"), 2);
-    LT_CHECK_EQ(hM.valor("linux"), 3);
-    LT_CHECK_EQ(hM.valor("estegosaurio"), 4);
-LT_END_TEST(IncrementarDespuesNoAfectaClaves)
 
 // Ejecutar tests
 LT_BEGIN_AUTO_TEST_ENV()
