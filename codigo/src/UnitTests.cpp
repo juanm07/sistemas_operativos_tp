@@ -326,8 +326,9 @@ LT_BEGIN_TEST(TestsNuestros, MaximoParaleloNoDevuelvaValorIncorrecto)
     hM.incrementar("arbol");
     hM.incrementar("arbol");
     hM.incrementar("arbol");
+     hashMapPair primero = hM.maximoParalelo(4);
     hM.incrementar("arbol");
-    hashMapPair actual = hM.maximoParalelo(4);
+    hashMapPair segundo = hM.maximoParalelo(4);
     hM.incrementar("zoo");
     hM.incrementar("zoo");
     hM.incrementar("zoo");
@@ -343,9 +344,10 @@ LT_BEGIN_TEST(TestsNuestros, MaximoParaleloNoDevuelvaValorIncorrecto)
     hM.incrementar("zoo");
     hM.incrementar("zoo");
 
-
-    LT_CHECK_EQ(actual.first, "arbol");
-    LT_CHECK_EQ(actual.second, 65);
+    LT_CHECK_EQ(primero.first, "arbol");
+    LT_CHECK_EQ(primero.second, 64);
+    LT_CHECK_EQ(segundo.first, "arbol");
+    LT_CHECK_EQ(segundo.second, 65);
 
     LT_CHECK_EQ(hM.valor("arbol"), 65);
     LT_CHECK_EQ(hM.valor("zoo"), 64);
