@@ -369,7 +369,7 @@ LT_BEGIN_TEST(TestsNuestros, IncrementarDespuesNoAfectaClaves)
 LT_END_TEST(IncrementarDespuesNoAfectaClaves)
 
 LT_BEGIN_TEST(TestsNuestros, testCompleto)
-     cargarMultiplesArchivos(hM, 4, {"data/concurrencia-1", "data/concurrencia-2", "data/concurrencia-3", "data/concurrencia-4"});
+    cargarMultiplesArchivos(hM, 4, {"data/concurrencia-1", "data/concurrencia-2", "data/concurrencia-3", "data/concurrencia-4"});
     LT_CHECK_EQ(hM.valor("arbol"), 50);
     LT_CHECK_EQ(hM.valor("zoo"), 50);
     LT_CHECK_EQ(hM.valor("mono"), 9);
@@ -457,8 +457,6 @@ LT_BEGIN_TEST(TestsNuestros, testCompleto)
     LT_CHECK_EQ(hM.valor("aguila"), 10);
     LT_CHECK_EQ(hM.valor("caballo"), 6);
 LT_END_TEST(testCompleto)
-
-
 
 // Ejecutar tests
 LT_BEGIN_AUTO_TEST_ENV()

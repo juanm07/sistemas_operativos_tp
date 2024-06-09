@@ -108,6 +108,7 @@ void HashMapConcurrente::maximoParaleloAux() {
         _mutex[indice].unlock();
         
     }
+    _index.store(0);
 }
 
 hashMapPair HashMapConcurrente::maximoParalelo(unsigned int cant_threads) {
